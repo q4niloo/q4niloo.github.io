@@ -1,0 +1,210 @@
+:root {
+    --ink: #000;
+    --deep: #120a35;
+    --teal: #1aa6c9;
+    --blue: #2a64c8;
+    --violet: #7a4be0;
+    --glow: #c79bff;
+    --gold: #ffd98a;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html { height: 100%; }
+
+/* System font stack: no download, renders instantly */
+body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--ink);
+    background: #1f4fa3;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    overflow: hidden;
+    padding:
+        max(16px, env(safe-area-inset-top))
+        max(16px, env(safe-area-inset-right))
+        max(16px, env(safe-area-inset-bottom))
+        max(16px, env(safe-area-inset-left));
+    touch-action: manipulation;
+}
+
+/* ---------- Background: teal-blue -> violet, iridescent like a morning glory ---------- */
+.bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    background: linear-gradient(155deg, #0e6a8c 0%, #1f4fa3 38%, #5a37ad 72%, #8a52d6 100%);
+}
+
+/* Soft glowing blobs. They only translate/scale (never rotate), and each one fades
+   to transparent inside its own box, so no edges can ever show. */
+.b {
+    position: absolute;
+    width: 80vmax;
+    height: 80vmax;
+    border-radius: 50%;
+    will-change: transform, opacity;
+    transform: translate3d(0, 0, 0);
+}
+.b1 { top: -30vmax; left: -30vmax; background: radial-gradient(closest-side, rgba(40, 200, 225, .85), transparent); animation: m1 22s ease-in-out infinite alternate; }
+.b2 { top: -10vmax; right: -40vmax; background: radial-gradient(closest-side, rgba(199, 155, 255, .80), transparent); animation: m2 27s ease-in-out infinite alternate; }
+.b3 { bottom: -40vmax; left: -20vmax; background: radial-gradient(closest-side, rgba(122, 75, 224, .85), transparent); animation: m3 30s ease-in-out infinite alternate; }
+.b4 { bottom: -30vmax; right: -30vmax; background: radial-gradient(closest-side, rgba(18, 10, 53, .75), transparent); animation: m4 25s ease-in-out infinite alternate; }
+.b5 { top: 20%; left: 10%; width: 40vmax; height: 40vmax; background: radial-gradient(closest-side, rgba(255, 217, 138, .45), transparent); animation: m5 18s ease-in-out infinite alternate, glint 7s ease-in-out infinite; }
+.b6 { top: 45%; right: 5%; width: 45vmax; height: 45vmax; background: radial-gradient(closest-side, rgba(200, 175, 255, .40), transparent); animation: m6 21s ease-in-out infinite alternate, glint 9s ease-in-out infinite reverse; }
+
+@keyframes m1 { to { transform: translate3d(30vw, 25vh, 0) scale(1.1); } }
+@keyframes m2 { to { transform: translate3d(-35vw, 30vh, 0) scale(.95); } }
+@keyframes m3 { to { transform: translate3d(35vw, -30vh, 0) scale(1.1); } }
+@keyframes m4 { to { transform: translate3d(-30vw, -25vh, 0) scale(1.05); } }
+@keyframes m5 { to { transform: translate3d(40vw, 25vh, 0) scale(1.2); } }
+@keyframes m6 { to { transform: translate3d(-40vw, -20vh, 0) scale(1.15); } }
+@keyframes glint { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
+
+/* ---------- Salt & pepper noise (sparse single white / black pixels) ---------- */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.22;
+    background-image: url("data:image/png;base64,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");
+    background-size: 160px 160px;
+}
+
+/* ---------- Content: no box, just typography over the gradient ---------- */
+.container {
+    position: relative;
+    z-index: 2;
+    width: min(100%, 560px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 8px;
+}
+
+/* Soft spotlight behind the text (fades out completely, so there is no visible edge) */
+.container::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: -25% -30%;
+    background: radial-gradient(closest-side, rgba(14, 8, 48, 0.45), transparent);
+    pointer-events: none;
+}
+
+/* Rotating lotus */
+.lotus {
+    width: clamp(120px, 36vw, 180px);
+    height: auto;
+    margin-bottom: clamp(18px, 5vw, 28px);
+    filter: drop-shadow(0 0 14px rgba(199, 155, 255, 0.85)) drop-shadow(0 0 34px rgba(80, 200, 235, 0.45));
+}
+
+.lotus .l {
+    transform-box: view-box;
+    transform-origin: 50% 50%;
+    will-change: transform;
+}
+.lotus .l1 { animation: spin 70s linear infinite; }
+.lotus .l2 { animation: spin 50s linear infinite reverse; }
+.lotus .l3 { animation: spin 36s linear infinite; }
+.lotus .l4 { animation: spin 26s linear infinite reverse; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+h1 {
+    margin: 0 0 clamp(24px, 6vw, 34px);
+    font-size: clamp(24px, 7vw, 34px);
+    line-height: 1.3;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    text-wrap: balance;
+    color: #fff;
+    text-shadow: 0 2px 18px rgba(14, 8, 48, 0.6);
+}
+
+.buttons {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+}
+
+button {
+    font: inherit;
+    font-size: 17px;
+    font-weight: 700;
+    min-width: 120px;
+    min-height: 48px;
+    padding: 12px 28px;
+    border: 2px solid rgba(255, 255, 255, 0.95);
+    border-radius: 14px;
+    color: #0a0417;
+    cursor: pointer;
+    background: linear-gradient(135deg, #d3b9ff, #8fc3ff);
+    box-shadow: 0 0 20px rgba(199, 155, 255, 0.8), 0 6px 16px rgba(18, 10, 53, 0.3);
+    transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+#no-btn {
+    background: linear-gradient(135deg, #8fe8ff, #c4c2ff);
+    box-shadow: 0 0 20px rgba(80, 215, 245, 0.8), 0 6px 16px rgba(18, 10, 53, 0.3);
+}
+
+button:active { transform: scale(0.97); }
+
+@media (hover: hover) {
+    button:hover { filter: brightness(1.07); transform: translateY(-2px); }
+}
+
+#no-btn.is-fleeing {
+    position: fixed;
+    margin: 0;
+    z-index: 50;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4), 0 0 26px rgba(120, 225, 255, 0.9), 0 8px 24px rgba(18, 10, 53, 0.6);
+    transition: left 0.18s ease, top 0.18s ease;
+}
+
+/* Popup: frosted glass with white text */
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+    width: min(86vw, 360px);
+    padding: 24px 28px;
+    border-radius: 18px;
+    background: rgba(20, 12, 62, 0.55);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    color: #fff;
+    font-size: 20px;
+    font-weight: 600;
+    box-shadow: 0 0 40px rgba(199, 155, 255, 0.55), 0 20px 60px rgba(10, 4, 23, 0.5);
+}
+
+.popup p { margin: 0; }
+
+.popup.fade-in { animation: fadeIn 0.3s ease; }
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .b, .lotus .l { animation: none; }
+}
